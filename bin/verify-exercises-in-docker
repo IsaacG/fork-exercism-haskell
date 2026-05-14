@@ -55,7 +55,7 @@ verify_exercise() {
     dir=$(realpath "${1}")
     slug=$(basename "${dir}")
 
-    if jq -e --arg slug "${slug}" '.exercises.practice[] | select(.slug == $slug and .status == "deprecated")' config.json >/dev/null 2>&1; then
+    if jq -e --arg slug "${slug}" '.exercises | [.practice, .concept] | add[] | select(.slug == $slug and .status == "deprecated")' config.json >/dev/null 2>&1; then
         echo "Skipping ${slug} (deprecated)..."
         return 0
     fi
